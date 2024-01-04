@@ -22,7 +22,7 @@ def generate_flood_data():
 
     url = "https://ffs.india-water.gov.in/ffm/api/station-water-level-above-warning/"
     response = requests.get(url)
-    df = pandas.read_csv("D:/Aswin's project/Backend/backend/api/station_map.csv",index_col=False)
+    df = pandas.read_csv("/Backend/backend/static/station_map.csv", index_col=False)
 
     temp_list = []
 

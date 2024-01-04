@@ -9,7 +9,7 @@ class Users(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=6,default=0.00,null=False)
     longitude = models.DecimalField(max_digits=9, decimal_places=6,default=0.00,null=False)
     nearestStation = models.CharField(null = False,max_length=50,default="")
-
+    stationCode = models.CharField(null=False,max_length=50,default="")
 
 class Area(models.Model):
     boundary =  models.BinaryField()
