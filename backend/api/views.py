@@ -30,7 +30,7 @@ from sklearn.neighbors import KNeighborsClassifier
 @api_view(['POST'])
 def createUser(request):
 
-    path = os.path.join(os.getcwd()+ "\static\station.csv")
+    path = os.path.join(os.getcwd()+ "/static/station.csv")
     df = pd.read_csv(path)
     X = df.drop(["Name","Station Code"],axis=1)
     Y = df.drop(["Lat","Lon"],axis=1)
