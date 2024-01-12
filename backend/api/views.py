@@ -37,18 +37,21 @@ def createUser(request):
     knn = KNeighborsClassifier()
     knn.fit(X, Y)
     serializer = CreateUserSerializer(data=request.data)
-    print(serializer.fields)
+
     if serializer.is_valid():
-        latitude = float(serializer.validated_data["latitude"])
-        longitude = float(serializer.validated_data["longitude"])
-        res = knn.predict([[latitude,longitude]])
-        location = res[0,0]
-        station = res[0,1]
-        serializer.validated_data["nearestStation"] = location
-        serializer.validated_data["stationCode"] = station
-        user = serializer.save()
-        user.save()
-        return Response(serializer.data)
+        try:
+            latitude = float(serializer.validated_data["latitude"])
+            longitude = float(serializer.validated_data["longitude"])
+            res = knn.predict([[latitude,longitude]])
+            location = res[0,0]
+            station = res[0,1]
+            serializer.validated_data["nearestStation"] = location
+            serializer.validated_data["stationCode"] = station
+            user = serializer.save()
+            user.save()
+            return Response(serializer.data)
+        except:
+            return Response({"Enable GPS on your app"})
     else:
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
