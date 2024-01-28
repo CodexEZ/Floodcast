@@ -5,5 +5,6 @@ urlpatterns = [
     path('register/',views.createUser),
     path('login/',views.login),
     path('getbounds/',views.getBounds),
-    path('getInfo/',views.getInfo)
+    path('getInfo/',views.getInfo),
+    path('getNearestStation/',views.getNearestStation)
 ]

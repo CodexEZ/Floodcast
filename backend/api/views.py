@@ -75,6 +75,8 @@ def getNearestStation(request):
             "location":location,
             "station":station
             })
+    else:
+        return Response({serializer.errors})
 
         
 
