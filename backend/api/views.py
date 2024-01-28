@@ -55,6 +55,30 @@ def createUser(request):
     else:
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['POST'])
+def getNearestStation(request):
+    path = os.path.join(os.getcwd()+ "/static/station.csv")
+    df = pd.read_csv(path)
+    X = df.drop(["Name","Station Code"],axis=1)
+    Y = df.drop(["Lat","Lon"],axis=1)
+    knn = KNeighborsClassifier()
+    knn.fit(X, Y)
+    serializer = getNearestStationSerializer(data = request.data)
+    if serializer.is_valid():
+        latitude = float(serializer.validated_data["latitude"])
+        longitude = float(serializer.validated_data["longitude"])
+        res = knn.predict([[latitude,longitude]])
+        location = res[0,0]
+        station = res[0,1]
+        return Response({
+            "location":location,
+            "station":station
+            })
+
+        
+
+
 @api_view(['POST'])
 def login(request):
     serializer = LoginSerializer(data=request.data)

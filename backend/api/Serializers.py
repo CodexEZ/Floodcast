@@ -20,3 +20,8 @@ class ForgotPasswordSerializer(serializers.Serializer):
 
 class getInfoSerializer(serializers.Serializer):
     username = serializers.CharField(allow_null=False)
+
+class getNearestStationSerializer(serializers.Serializer):
+    latitude = serializers.FloatField(allow_null=False,default=0.00)
+    longitude = serializers.FloatField(allow_null=False, default=0.00)
+    
