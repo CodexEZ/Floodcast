@@ -5,6 +5,7 @@ urlpatterns = [
     path('register/',views.createUser),
     path('login/',views.login),
     path('getbounds/',views.getBounds),
-    path('getInfo/',views.getInfo),
-    path('getNearestStation/',views.getNearestStation)
+    path('getInfo/',views.getData),
+    path('getNearestStation/',views.getNearestStation),
+    path('waterLevelData/',views.pastRiverData)
 ]

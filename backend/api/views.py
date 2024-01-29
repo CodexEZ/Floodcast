@@ -66,18 +66,42 @@ def getNearestStation(request):
     knn.fit(X, Y)
     serializer = getNearestStationSerializer(data = request.data)
     if serializer.is_valid():
-        latitude = float(serializer.validated_data["latitude"])
-        longitude = float(serializer.validated_data["longitude"])
-        res = knn.predict([[latitude,longitude]])
-        location = res[0,0]
-        station = res[0,1]
-        return Response({
-            "location":location,
-            "station":station
-            })
-    else:
-        return Response({serializer.errors})
+        print(serializer.data)
+        try:
+            latitude = request.data['latitude']
+            longitude = request.data['longitude']
+            res = knn.predict([[latitude,longitude]])
+            location = res[0,0]
+            station = res[0,1]
+            return Response({
+                "location":location,
+                "station":station
+                })
+        except:
+            return Response({"Some error ocurred"})
 
+    else:
+        return Response(serializer.errors)
+
+        
+@api_view(['POST'])
+def pastRiverData(request):
+    try:
+        name = request.data['station']
+        
+        url = f"https://ffs.india-water.gov.in/iam/api/new-entry-data/specification/sorted?sort-criteria=%7B%22sortOrderDtos%22:%5B%7B%22sortDirection%22:%22ASC%22,%22field%22:%22id.dataTime%22%7D%5D%7D&specification=%7B%22where%22:%7B%22where%22:%7B%22where%22:%7B%22expression%22:%7B%22valueIsRelationField%22:false,%22fieldName%22:%22id.stationCode%22,%22operator%22:%22eq%22,%22value%22:%22{name}%22%7D%7D,%22and%22:%7B%22expression%22:%7B%22valueIsRelationField%22:false,%22fieldName%22:%22id.datatypeCode%22,%22operator%22:%22eq%22,%22value%22:%22HHS%22%7D%7D%7D,%22and%22:%7B%22expression%22:%7B%22valueIsRelationField%22:false,%22fieldName%22:%22dataValue%22,%22operator%22:%22null%22,%22value%22:%22false%22%7D%7D%7D,%22and%22:%7B%22expression%22:%7B%22valueIsRelationField%22:false,%22fieldName%22:%22id.dataTime%22,%22operator%22:%22btn%22,%22value%22:%222024-01-25T21:40:03.275,2024-01-28T21:40:03.275%22%7D%7D%7Dhttps://ffs.india-water.gov.in/iam/api/new-entry-data/specification/sorted?sort-criteria=%7B%22sortOrderDtos%22:%5B%7B%22sortDirection%22:%22ASC%22,%22field%22:%22id.dataTime%22%7D%5D%7D&specification=%7B%22where%22:%7B%22where%22:%7B%22where%22:%7B%22expression%22:%7B%22valueIsRelationField%22:false,%22fieldName%22:%22id.stationCode%22,%22operator%22:%22eq%22,%22value%22:%22036-MDBURLA%22%7D%7D,%22and%22:%7B%22expression%22:%7B%22valueIsRelationField%22:false,%22fieldName%22:%22id.datatypeCode%22,%22operator%22:%22eq%22,%22value%22:%22HHS%22%7D%7D%7D,%22and%22:%7B%22expression%22:%7B%22valueIsRelationField%22:false,%22fieldName%22:%22dataValue%22,%22operator%22:%22null%22,%22value%22:%22false%22%7D%7D%7D,%22and%22:%7B%22expression%22:%7B%22valueIsRelationField%22:false,%22fieldName%22:%22id.dataTime%22,%22operator%22:%22btn%22,%22value%22:%222024-01-25T21:40:03.275,2024-01-28T21:40:03.275%22%7D%7D%7D"
+        response = requests.get(url)
+        if response.status_code == 200:
+            print("CHECk")
+            json_data = response.json()
+            data = []
+            for json in json_data:
+                date = json['id']['dataTime'][5:10] +" "+ json['id']['dataTime'][11:len(json['id']['dataTime'])]
+                data.append({"date": date,"waterlevel":json['dataValue']})
+            return Response(data=data)
+    except:
+        print("ERROR")
+        return Response()
         
 
 
@@ -126,7 +150,9 @@ def getBounds(request):
 
 import requests
 
-def getData(stationCode : string):
+@api_view(['POST'])
+def getData(request):
+    stationCode = request.data['station']
     headers = {
         "Class-Name": "ForecastDetailLayerStationDto"
     }
@@ -142,4 +168,4 @@ def getData(stationCode : string):
         "warning_level": json_data["floodForecastStaticStationCode"]["warningLevel"],
         "current_level": json_data_curr[0]['dataValue']
     }
-    return data
+    return Response(data=data)
