@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Users
+from .models import Users,Pings
 from django.contrib.auth.models import User
-
+from django.utils import timezone
 
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,4 +24,8 @@ class getInfoSerializer(serializers.Serializer):
 class getNearestStationSerializer(serializers.Serializer):
     latitude = serializers.FloatField(allow_null=False)
     longitude = serializers.FloatField(allow_null=False)
-    
+
+class getLoc(serializers.ModelSerializer):
+    class Meta:
+        model = Pings
+        fields = ["longitude", "latitude"]

@@ -1,5 +1,6 @@
 from django.db import models
 import numpy as np
+from django.utils import timezone
 # Create your models here.
 
 class Users(models.Model):
@@ -22,3 +23,8 @@ class Area(models.Model):
     def loadArray(self):
         return np.frombuffer(self.boundary,dtype=np.float32)
 
+class Pings(models.Model):
+    id = models.CharField(auto_created=True, primary_key=True,max_length=5)
+    latitude = models.FloatField(null=False)
+    longitude = models.FloatField(null=False)
+    timestamp = models.DateTimeField(default=timezone.now)

@@ -169,3 +169,20 @@ def getData(request):
         "current_level": json_data_curr[0]['dataValue']
     }
     return Response(data=data)
+
+
+@api_view(['POST'])
+def pingLocation(request):
+    serializers = getLoc(data=request.data)
+    if serializers.is_valid():
+        serializers.save()
+        return Response(serializers.data,status=status.HTTP_200_OK)
+    else:
+        return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def getPingedLocations(request):
+    locs = Pings.objects.all()
+    serializers = getLoc(locs)
+    return Response(serializers.data)
