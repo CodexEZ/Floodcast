@@ -24,7 +24,7 @@ class Area(models.Model):
         return np.frombuffer(self.boundary,dtype=np.float32)
 
 class Pings(models.Model):
-    id = models.CharField(auto_created=True, primary_key=True,max_length=5)
+    serialnum = models.AutoField(primary_key=True)
     latitude = models.FloatField(null=False)
     longitude = models.FloatField(null=False)
     description = models.CharField(null=False, default="",max_length=200)
