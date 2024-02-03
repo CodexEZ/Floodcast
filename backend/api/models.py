@@ -27,4 +27,5 @@ class Pings(models.Model):
     id = models.CharField(auto_created=True, primary_key=True,max_length=5)
     latitude = models.FloatField(null=False)
     longitude = models.FloatField(null=False)
+    description = models.CharField(null=False, default="",max_length=200)
     timestamp = models.DateTimeField(default=timezone.now)

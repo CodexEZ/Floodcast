@@ -7,5 +7,7 @@ urlpatterns = [
     path('getbounds/',views.getBounds),
     path('getInfo/',views.getData),
     path('getNearestStation/',views.getNearestStation),
-    path('waterLevelData/',views.pastRiverData)
+    path('waterLevelData/',views.pastRiverData),
+    path('ping/SendPing',views.pingLocation),
+    path('ping/GetPings',views.getPingedLocations),
 ]

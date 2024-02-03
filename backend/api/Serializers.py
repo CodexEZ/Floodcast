@@ -28,4 +28,8 @@ class getNearestStationSerializer(serializers.Serializer):
 class getLoc(serializers.ModelSerializer):
     class Meta:
         model = Pings
-        fields = ["longitude", "latitude"]
+        fields = ["longitude", "latitude","description"]
+class sendLocs(serializers.ModelSerializer):
+    class Meta:
+        model = Pings
+        fields = "__all__"

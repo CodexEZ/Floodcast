@@ -184,5 +184,5 @@ def pingLocation(request):
 @api_view(['GET'])
 def getPingedLocations(request):
     locs = Pings.objects.all()
-    serializers = getLoc(locs)
+    serializers = sendLocs(instance=locs,many = True)
     return Response(serializers.data)
